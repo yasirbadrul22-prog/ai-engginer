@@ -1,0 +1,20 @@
+%%writefile main.py
+from fastapi import FastAPI
+from pydantic import BaseModel, Field
+
+app = FastAPI(title="AI Engineer - API Pertama")
+
+class InputPrediksi(BaseModel):
+    nilai: float = Field(ge=0, le=100)
+
+@app.get("/")
+def beranda():
+    return {"status": "API online", "pesan": "Berhasil!"}
+
+@app.post("/predict")
+def predict(data: InputPrediksi):
+    hasil = "Lulus" if data.nilai >= 75 else "Belum Lulus"
+    return {
+        "nilai": data.nilai,
+        "prediksi": hasil
+    }
